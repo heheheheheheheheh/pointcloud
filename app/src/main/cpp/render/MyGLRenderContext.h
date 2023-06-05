@@ -34,6 +34,8 @@ public:
 	static MyGLRenderContext* GetInstance();
 	static void DestroyInstance();
 
+    void setPointData(float *pDouble, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ);
+
 private:
 	static MyGLRenderContext *m_pContext;
 	GLSampleBase *m_pCurSample;

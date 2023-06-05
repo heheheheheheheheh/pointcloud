@@ -42,12 +42,6 @@ public:
 
 	}
 
-	virtual void LoadImage(NativeImage *pImage)
-	{};
-
-	virtual void LoadMultiImageWithIndex(int index, NativeImage *pImage)
-	{};
-
 	virtual void LoadShortArrData(short *const pShortArr, int arrSize)
 	{}
 
@@ -64,6 +58,8 @@ public:
 	virtual void Draw(int screenW, int screenH) = 0;
 
 	virtual void Destroy() = 0;
+
+	virtual void setPointData(float *pDouble, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ){}
 
 protected:
 	GLuint m_VertexShader;

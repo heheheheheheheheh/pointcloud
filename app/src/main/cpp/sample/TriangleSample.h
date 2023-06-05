@@ -14,13 +14,13 @@ public:
 	TriangleSample();
 	virtual ~TriangleSample();
 
-	virtual void LoadImage(NativeImage *pImage);
-
 	virtual void Init();
 
 	virtual void Draw(int screenW, int screenH);
 
 	virtual void Destroy();
+	void setPointData(float *pDouble, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ){
+	}
 };
 
 

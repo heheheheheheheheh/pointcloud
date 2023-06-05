@@ -15,13 +15,6 @@ TriangleSample::~TriangleSample()
 {
 }
 
-
-void TriangleSample::LoadImage(NativeImage *pImage)
-{
-	//null implement
-
-}
-
 void TriangleSample::Init()
 {
 	if(m_ProgramObj != 0)

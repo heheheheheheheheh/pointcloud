@@ -6,6 +6,8 @@ import static com.example.myapplication.MyNativeRender.SAMPLE_TYPE_SET_TOUCH_LOC
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -81,4 +83,7 @@ public class MyGLRender implements GLSurfaceView.Renderer {
         mNativeRender.native_UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
     }
 
+    public void setPointData(@Nullable float[] pointData,float[] bounds) {
+        mNativeRender.native_setPointData(pointData,bounds[0],bounds[1],bounds[2],bounds[3],bounds[4],bounds[5]);
+    }
 }

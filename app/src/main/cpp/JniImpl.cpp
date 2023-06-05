@@ -97,14 +97,11 @@ JNIEXPORT void JNICALL native_OnDrawFrame(JNIEnv *env, jobject instance)
 
 }
 
-/*
- * Class:     com_byteflow_app_egl_NativeBgRender
- * Method:    natuve_BgRenderUnInit
- * Signature: ()V
- */
-JNIEXPORT void JNICALL natuve_BgRenderUnInit(JNIEnv *env, jobject instance)
+JNIEXPORT void JNICALL native_setPointData(JNIEnv *env, jobject instance,jfloatArray jdate,jfloat minX,jfloat minY,jfloat minZ,jfloat maxX,jfloat maxY,jfloat maxZ)
 {
-	EGLRender::GetInstance()->UnInit();
+	jfloat* pointData = (jfloat*)env->GetFloatArrayElements(jdate, 0);
+	jsize length = env->GetArrayLength(jdate);
+	MyGLRenderContext::GetInstance()->setPointData(pointData,length/3,minX,minY,minZ,maxX,maxY,maxZ);
 }
 
 #ifdef __cplusplus
@@ -114,6 +111,7 @@ JNIEXPORT void JNICALL natuve_BgRenderUnInit(JNIEnv *env, jobject instance)
 static JNINativeMethod g_RenderMethods[] = {
 		{"native_Init",                      "()V",       (void *)(native_Init)},
 		{"native_UnInit",                    "()V",       (void *)(native_UnInit)},
+		{"native_setPointData",              "([FFFFFFF)V",       (void *)(native_setPointData)},
 		//{"native_SetImageData",              "(III[B)V",  (void *)(native_SetImageData)},
 		//{"native_SetImageDataWithIndex",     "(IIII[B)V", (void *)(native_SetImageDataWithIndex)},
 		{"native_SetParamsInt",              "(III)V",    (void *)(native_SetParamsInt)},

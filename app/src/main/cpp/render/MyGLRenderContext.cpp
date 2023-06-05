@@ -118,5 +118,12 @@ void MyGLRenderContext::DestroyInstance()
 
 }
 
+void MyGLRenderContext::setPointData(float *pDouble, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ) {
+	if (m_pCurSample)
+	{
+		m_pCurSample->setPointData(pDouble, i,minX,minY,minZ,maxX,maxY,maxZ);
+	}
+}
+
 
 

@@ -7,8 +7,6 @@
 
 #include "stdint.h"
 #include <GLES3/gl3.h>
-#include "TextureMapSample.h"
-#include "NV21TextureMapSample.h"
 #include "TriangleSample.h"
 
 class MyGLRenderContext

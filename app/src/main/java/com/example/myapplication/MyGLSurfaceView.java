@@ -17,6 +17,8 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
     private float mPreviousX;
     private int mXAngle;
     private int mYAngle;
+    private float mTotalXTrans;
+    private float mTotalYTrans;
 
     private MyGLRender mGLRender;
 
@@ -74,8 +76,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
                     case MotionEvent.ACTION_MOVE:
                         float dy = y - mPreviousY;
                         float dx = x - mPreviousX;
-                        mYAngle += dx * TOUCH_SCALE_FACTOR;
-                        mXAngle += dy * TOUCH_SCALE_FACTOR;
+                        mTotalXTrans += dx;
+                        mTotalYTrans += dy;
+//                        mYAngle += dx * TOUCH_SCALE_FACTOR;
+//                        mXAngle += dy * TOUCH_SCALE_FACTOR;
+                        mYAngle = (int) (mTotalXTrans * TOUCH_SCALE_FACTOR);
+                        mXAngle = (int) (mTotalYTrans * TOUCH_SCALE_FACTOR);
                 }
                 mPreviousY = y;
                 mPreviousX = x;

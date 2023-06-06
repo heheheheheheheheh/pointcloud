@@ -4,14 +4,17 @@
 
 
 #include "MyGLRenderContext.h"
+#include "TriangleSample.h"
+#include "PointCloud.h"
 #include "LogUtil.h"
 
 MyGLRenderContext* MyGLRenderContext::m_pContext = nullptr;
 
 MyGLRenderContext::MyGLRenderContext()
 {
-	m_pCurSample = new TriangleSample();
-
+	m_pCurSample = new PointCloud();
+//	m_pCurSample = new TriangleSample();
+//	m_pCurSample->Init();
 }
 
 MyGLRenderContext::~MyGLRenderContext()
@@ -24,15 +27,15 @@ MyGLRenderContext::~MyGLRenderContext()
 }
 
 
-void MyGLRenderContext::SetParamsInt(int paramType, int value0, int value1)
+/*void MyGLRenderContext::SetParamsInt(int paramType, int value0, int value1)
 {
 	LOGCATE("MyGLRenderContext::SetParamsInt paramType = %d, value0 = %d, value1 = %d", paramType, value0, value1);
 
 	if (paramType == SAMPLE_TYPE)
 	{
-		m_pCurSample = new TriangleSample();
+		m_pCurSample = new PointCloud();
 	}
-}
+}*/
 
 void MyGLRenderContext::SetParamsFloat(int paramType, float value0, float value1) {
 	LOGCATE("MyGLRenderContext::SetParamsFloat paramType=%d, value0=%f, value1=%f", paramType, value0, value1);
@@ -75,6 +78,10 @@ void MyGLRenderContext::UpdateTransformMatrix(float rotateX, float rotateY, floa
 void MyGLRenderContext::OnSurfaceCreated()
 {
 	LOGCATE("MyGLRenderContext::OnSurfaceCreated");
+	/*if (m_pCurSample)
+	{
+		m_pCurSample->Init();
+	}*/
 	glClearColor(1.0f,1.0f,1.0f, 1.0f);
 }
 
@@ -88,7 +95,7 @@ void MyGLRenderContext::OnSurfaceChanged(int width, int height)
 
 void MyGLRenderContext::OnDrawFrame()
 {
-	LOGCATE("MyGLRenderContext::OnDrawFrame");
+//	LOGCATE("MyGLRenderContext::OnDrawFrame");
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	if (m_pCurSample)
 	{
@@ -99,7 +106,7 @@ void MyGLRenderContext::OnDrawFrame()
 
 MyGLRenderContext *MyGLRenderContext::GetInstance()
 {
-	LOGCATE("MyGLRenderContext::GetInstance");
+//	LOGCATE("MyGLRenderContext::GetInstance");
 	if (m_pContext == nullptr)
 	{
 		m_pContext = new MyGLRenderContext();

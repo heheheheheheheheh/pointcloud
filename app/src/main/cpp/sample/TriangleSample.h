@@ -11,6 +11,9 @@
 class TriangleSample : public GLSampleBase
 {
 public:
+	GLuint m_VaoId;
+	GLuint m_VboIds[1];
+
 	TriangleSample();
 	virtual ~TriangleSample();
 

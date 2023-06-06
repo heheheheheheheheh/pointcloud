@@ -20,7 +20,7 @@ public class MyNativeRender {
 
     public native void native_UnInit();
 
-    public native void native_SetParamsInt(int paramType, int value0, int value1);
+//    public native void native_SetParamsInt(int paramType, int value0, int value1);
 
     public native void native_SetParamsFloat(int paramType, float value0, float value1);
 

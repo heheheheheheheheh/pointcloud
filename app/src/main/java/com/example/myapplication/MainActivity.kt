@@ -25,8 +25,9 @@ class MainActivity : AppCompatActivity() {
                 mGLSurfaceView!!.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
 //        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
 //        mGLSurfaceView.setAspectRatio(mRootView.width, mRootView.height)
-                mGLRender.init()
+
                 mGLRender.setPointData(getPointData(),mBounds)
+                Thread.sleep(100)
                 mGLSurfaceView!!.requestRender()
             }
         }
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     private var mBounds:FloatArray = FloatArray(6){0.0f}
     fun getPointData():FloatArray? {
         if (mData == null) {
-            val data = FileUtil.readPointCloud(this, "PointVoxel_3.txt",mBounds)
+            val data = FileUtil.readPointCloud(this, "PointVoxel_3_1.txt",mBounds)
 //            mData = data.toArray()
 //            mData = arrayOf(data)
             //fixme://

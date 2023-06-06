@@ -46,16 +46,16 @@ public class MyGLRender implements GLSurfaceView.Renderer {
         mNativeRender.native_UnInit();
     }
 
-    public void setParamsInt(int paramType, int value0, int value1) {
+/*    public void setParamsInt(int paramType, int value0, int value1) {
 //        if (paramType == SAMPLE_TYPE) {
 //            mSampleType = value0;
 //        }
         mNativeRender.native_SetParamsInt(paramType, value0, value1);
-    }
+    }*/
 
     public void setTouchLoc(float x, float y)
     {
-        mNativeRender.native_SetParamsFloat(SAMPLE_TYPE_SET_TOUCH_LOC, x, y);
+//        mNativeRender.native_SetParamsFloat(SAMPLE_TYPE_SET_TOUCH_LOC, x, y);
     }
 
 /*    public void setGravityXY(float x, float y) {
@@ -80,7 +80,7 @@ public class MyGLRender implements GLSurfaceView.Renderer {
 
     public void updateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY)
     {
-        mNativeRender.native_UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
+//        mNativeRender.native_UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
     }
 
     public void setPointData(@Nullable float[] pointData,float[] bounds) {

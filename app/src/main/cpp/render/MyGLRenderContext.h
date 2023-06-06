@@ -17,7 +17,7 @@ class MyGLRenderContext
 
 public:
 
-	void SetParamsInt(int paramType, int value0, int value1);
+//	void SetParamsInt(int paramType, int value0, int value1);
 
 	void SetParamsFloat(int paramType, float value0, float value1);
 

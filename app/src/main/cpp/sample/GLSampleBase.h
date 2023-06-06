@@ -59,7 +59,7 @@ public:
 
 	virtual void Destroy() = 0;
 
-	virtual void setPointData(float *pDouble, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ){}
+	virtual void setPointData(float *points, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ){}
 
 protected:
 	GLuint m_VertexShader;

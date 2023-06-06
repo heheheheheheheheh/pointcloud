@@ -13,10 +13,57 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class FileUtil {
+    private static final float COLOR_PARSE_NUM = 255;
     private static FileUtil instance = new FileUtil();
 
     public static FileUtil getInstance() {
         return instance;
+    }
+
+    public static ArrayList<Float> readPointCloudColor(Activity activity, String fileName) {
+        ArrayList<Float> list = new ArrayList<>();
+        BufferedReader buffReader = null;
+        InputStream inputStream = null;
+        InputStreamReader fileReader = null;
+        try {
+            inputStream = activity.getAssets().open(fileName);
+            fileReader = new InputStreamReader(inputStream);
+            buffReader = new BufferedReader(fileReader);
+            String str = null;
+            while ((str = buffReader.readLine()) != null) {
+                String[] strs = str.split(",");
+                if (strs.length == 3) {
+                    for (String s : strs) {
+                        int value = Integer.parseInt(s);
+                        list.add(value/COLOR_PARSE_NUM);
+                    }
+                } else {
+                    list.add(0.0f);
+                    list.add(0.0f);
+                    list.add(0.0f);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                    inputStream = null;
+                }
+                if (fileReader != null) {
+                    fileReader.close();
+                    fileReader = null;
+                }
+                if (buffReader != null) {
+                    buffReader.close();
+                    buffReader = null;
+                }
+            } catch (Exception e) {
+            }
+        }
+        return list;
     }
 
     public static ArrayList<Float> readPointCloud(Activity activity, String fileName, float[] bounds) {
@@ -40,7 +87,7 @@ public class FileUtil {
                 String[] strs = str.split(",");
                 if (strs.length == 3) {
                     for (int i = 0; i < strs.length; i++) {
-                        float value = Float.parseFloat(strs[i]);
+                        Float value = Float.parseFloat(strs[i]);
                         list.add(value);
                         if (i == 0) {
                             maxX = Math.max(maxX,value);

@@ -8,16 +8,18 @@
 
 #include "GLSampleBase.h"
 #include "glm.hpp"
+#include "DataMessage.hpp"
 class PointCloud : public GLSampleBase
 {
 public:
+    DataMessage otherMessage;
     bool VAOInited = false;
     //opengl字段
     GLint m_PointSizeLoc;
     GLint m_MVPMatLoc;
     //opengl vao vbo
     GLuint m_VaoId;
-    GLuint m_VboIds[1];
+
     //图形变换信息
     glm::mat4 m_MVPMatrix;
     //手势变换信息
@@ -45,20 +47,8 @@ public:
 
     virtual void Destroy();
 
-/*    //add Point
-    float getWidth()
-    {
-        return maxCoordinate.x - minCoordinate.x;
-    }
-    float getLength()
-    {
-        return maxCoordinate.y - minCoordinate.y;
-    }
-    float getHeight()
-    {
-        return maxCoordinate.z - minCoordinate.z;
-    }*/
     virtual void setPointData(float *pDouble, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ);
+    virtual void setPointOtherData(float *pData, int length, int singleSize);
     void UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio);
     virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY);
     void initVAO();

@@ -131,6 +131,12 @@ void MyGLRenderContext::setPointData(float *pDouble, int i,float minX,float minY
 		m_pCurSample->setPointData(pDouble, i,minX,minY,minZ,maxX,maxY,maxZ);
 	}
 }
+void MyGLRenderContext::setPointOtherData(float *pDouble, int i,int singleSize) {
+	if (m_pCurSample)
+	{
+		m_pCurSample->setPointOtherData(pDouble, i,singleSize);
+	}
+}
 
 
 

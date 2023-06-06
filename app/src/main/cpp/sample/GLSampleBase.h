@@ -61,6 +61,8 @@ public:
 
 	virtual void setPointData(float *points, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ){}
 
+	virtual void setPointOtherData(float *pData, int length, int singleSize){}
+
 protected:
 	GLuint m_VertexShader;
 	GLuint m_FragmentShader;

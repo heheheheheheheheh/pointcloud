@@ -102,6 +102,14 @@ JNIEXPORT void JNICALL native_setPointData(JNIEnv *env, jobject instance,jfloatA
 	jfloat* pointData = (jfloat*)env->GetFloatArrayElements(jdate, 0);
 	jsize length = env->GetArrayLength(jdate);
 	MyGLRenderContext::GetInstance()->setPointData(pointData,length/3,minX,minY,minZ,maxX,maxY,maxZ);
+	env->ReleaseFloatArrayElements(jdate, pointData, 0);
+}
+JNIEXPORT void JNICALL native_setPointOtherData(JNIEnv *env, jobject instance,jfloatArray jdate,jint singleSize)
+{
+	jfloat* pointData = (jfloat*)env->GetFloatArrayElements(jdate, 0);
+	jsize length = env->GetArrayLength(jdate);
+	MyGLRenderContext::GetInstance()->setPointOtherData(pointData,length/singleSize,singleSize);
+	env->ReleaseFloatArrayElements(jdate, pointData, 0);
 }
 
 #ifdef __cplusplus
@@ -112,6 +120,7 @@ static JNINativeMethod g_RenderMethods[] = {
 		{"native_Init",                      "()V",       (void *)(native_Init)},
 		{"native_UnInit",                    "()V",       (void *)(native_UnInit)},
 		{"native_setPointData",              "([FFFFFFF)V",       (void *)(native_setPointData)},
+		{"native_setPointOtherData",              "([FI)V",       (void *)(native_setPointOtherData)},
 		//{"native_SetImageData",              "(III[B)V",  (void *)(native_SetImageData)},
 		//{"native_SetImageDataWithIndex",     "(IIII[B)V", (void *)(native_SetImageDataWithIndex)},
 //		{"native_SetParamsInt",              "(III)V",    (void *)(native_SetParamsInt)},

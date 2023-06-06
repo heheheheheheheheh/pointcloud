@@ -10,6 +10,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private val mGLRender = MyGLRender()
     private var mGLSurfaceView: MyGLSurfaceView? = null
+    private var mData: FloatArray? = null
+    private var mDataColor: FloatArray? = null
+    private var mBounds:FloatArray = FloatArray(6){0.0f}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,9 +27,10 @@ class MainActivity : AppCompatActivity() {
                 mRootView.addView(mGLSurfaceView, lp)
                 mGLSurfaceView!!.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
 //        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-//        mGLSurfaceView.setAspectRatio(mRootView.width, mRootView.height)
-
-                mGLRender.setPointData(getPointData(),mBounds)
+                getPointData()
+                //fixme:耗时操作
+                mGLRender.setPointData(mData,mBounds)
+                mGLRender.setPointOtherData(mDataColor,3)
                 Thread.sleep(100)
                 mGLSurfaceView!!.requestRender()
             }
@@ -38,16 +42,16 @@ class MainActivity : AppCompatActivity() {
         mGLRender.unInit()
     }
 
-    private var mData: FloatArray? = null
-    private var mBounds:FloatArray = FloatArray(6){0.0f}
-    fun getPointData():FloatArray? {
+    //fixme:耗时操作 子线程
+    fun getPointData() {
         if (mData == null) {
             val data = FileUtil.readPointCloud(this, "PointVoxel_3_1.txt",mBounds)
-//            mData = data.toArray()
-//            mData = arrayOf(data)
-            //fixme://
+            //fixme://减少转换次数
             mData = data.toTypedArray().toFloatArray()
         }
-        return mData
+        if(mDataColor == null){
+            val dataColor = FileUtil.readPointCloudColor(this, "PointVoxelRGB_3.txt")
+            mDataColor = dataColor.toTypedArray().toFloatArray()
+        }
     }
 }

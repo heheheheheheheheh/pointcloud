@@ -38,4 +38,5 @@ public class MyNativeRender {
 
     public native void native_OnDrawFrame();
     public native void native_setPointData(float[] pointData,float minX,float minY,float minZ,float maxX,float maxY,float maxZ);
+    public native void native_setPointOtherData(float[] pointData,int singleSize);
 }

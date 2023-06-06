@@ -86,4 +86,7 @@ public class MyGLRender implements GLSurfaceView.Renderer {
     public void setPointData(@Nullable float[] pointData,float[] bounds) {
         mNativeRender.native_setPointData(pointData,bounds[0],bounds[1],bounds[2],bounds[3],bounds[4],bounds[5]);
     }
+    public void setPointOtherData(@Nullable float[] pointData,int singleSize) {
+        mNativeRender.native_setPointOtherData(pointData,singleSize);
+    }
 }

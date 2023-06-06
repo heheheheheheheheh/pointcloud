@@ -29,15 +29,6 @@ void PointCloud::Init() {
             "   gl_Position = mvpMatrix*vec4(position, 1.0f);\n"
             "   gl_PointSize = vPointSize;\n"
             "}\n";
-    char vShaderStr1[] =
-            "#version 300 es                          \n"
-            "layout(location = 0) in vec4 vPosition;  \n"
-            "uniform float vPointSize;  \n"
-            "void main()                              \n"
-            "{                                        \n"
-            "   gl_Position = vPosition;              \n"
-            "   gl_PointSize = vPointSize;\n"
-            "}                                        \n";
 
     char fShaderStr[] =
             "#version 300 es                              \n"
@@ -54,14 +45,6 @@ void PointCloud::Init() {
         m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "mvpMatrix");
         GO_CHECK_GL_ERROR();
     }
-/*    float vVertices[] = {
-            0.0f,  0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-    };
-    m_Points = vVertices;
-    numberOfpoints =3;
-    m_Scale = 1;*/
     initVAO();
 
 }
@@ -70,28 +53,17 @@ void PointCloud::Draw(int screenW, int screenH) {
     LOGCATE("PointCloud::Draw");
     if (m_ProgramObj == 0)
         return;
-
     glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(1.0, 1.0, 1.0, 1.0);
-/*    if(!VAOInited){
-        initVAO();
-    }*/
-//    glEnable(GL_DEPTH);
+    glEnable(GL_DEPTH);
     // Use the program object
     glUseProgram(m_ProgramObj);
-//    GO_CHECK_GL_ERROR();
     glBindVertexArray(m_VaoId);
-//    GO_CHECK_GL_ERROR();
-    // Load the vertex data
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, m_Points );
-//    glEnableVertexAttribArray(0);
-//    GO_CHECK_GL_ERROR();
-    glUniform1f(m_PointSizeLoc, 15.0f);
+    glUniform1f(m_PointSizeLoc, 5.0f);
 
-    UpdateMVPMatrix(m_MVPMatrix, 0, 0, (float) screenW / screenH);
+    UpdateMVPMatrix(m_MVPMatrix, m_AngleX, m_AngleY, (float) screenW / screenH);
     glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
 
-//    glDrawArrays(GL_TRIANGLES, 0, 3);
     glDrawArrays(GL_POINTS, 0, numberOfpoints);
 //    glDrawElements(GL_POINTS, numberOfpoints, GL_UNSIGNED_SHORT, (const void *) 0);
     glBindVertexArray(GL_NONE);
@@ -103,16 +75,13 @@ void PointCloud::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, f
 //            ratio);
     angleX = angleX % 360;
     angleY = angleY % 360;
-
     //转化为弧度角
     float radiansX = static_cast<float>(MATH_PI / 180.0f * angleX);
     float radiansY = static_cast<float>(MATH_PI / 180.0f * angleY);
-
     // Projection matrix
 //    glm::mat4 Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
     //glm::mat4 Projection = glm::frustum(-ratio, ratio, -1.0f, 1.0f, 4.0f, 100.0f);
     glm::mat4 Projection = glm::perspective(45.0f,ratio, 0.1f,100.f);
-
     // View matrix
     glm::mat4 View = glm::lookAt(
             glm::vec3(0, 4, 4), // Camera is at (0,0,1), in World Space
@@ -121,7 +90,7 @@ void PointCloud::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, f
     );
     // Model matrix
     glm::mat4 Model = glm::mat4(1.0f);
-    Model = glm::scale(Model, glm::vec3(m_Scale, m_Scale, m_Scale));
+    Model = glm::scale(Model, glm::vec3(m_PreScale*m_ScaleX, m_PreScale*m_ScaleY, m_PreScale*m_ScaleX));
     Model = glm::rotate(Model, radiansX, glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, radiansY, glm::vec3(0.0f, 1.0f, 0.0f));
     float transX = -(minCoordinate.x + maxCoordinate.x) / 2;
@@ -141,16 +110,6 @@ void PointCloud::Destroy() {
 
 void PointCloud::setPointData(float *points, int i, float minX, float minY, float minZ, float maxX,
                               float maxY, float maxZ) {
-    LOGCATE("PointCloud::setPointData");
-/*    GLfloat vVertices[] = {
-            0.0f,  0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-    };
-
-    m_Points = vVertices;
-    numberOfpoints =3;
-    m_Scale = 1;*/
     m_Points = points;
     numberOfpoints = i;
     minCoordinate.x = minX;
@@ -162,16 +121,15 @@ void PointCloud::setPointData(float *points, int i, float minX, float minY, floa
     float maxDitance = maxX - minX;
     maxDitance = fmaxf(maxDitance, maxY - minY);
     maxDitance = fmaxf(maxDitance, maxZ - minZ);
-    m_Scale = 1 / maxDitance;
-
+    m_PreScale = 1 / maxDitance;
+    m_PreScale *= 4;
 }
 void PointCloud::initVAO(){
     LOGCATE("PointCloud::initVAO");
     glGenBuffers(1, m_VboIds);
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[0]);
     glBufferData(GL_ARRAY_BUFFER, numberOfpoints*3 * sizeof(float), m_Points, GL_STATIC_DRAW);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW);
-    // Generate VAO Ids
+
     glGenVertexArrays(1, &m_VaoId);
     glBindVertexArray(m_VaoId);
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[0]);
@@ -182,4 +140,12 @@ void PointCloud::initVAO(){
     glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
     glBindVertexArray(GL_NONE);
     VAOInited = true;
+}
+void PointCloud::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY)
+{
+    GLSampleBase::UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
+    m_AngleX = static_cast<int>(rotateX);
+    m_AngleY = static_cast<int>(rotateY);
+    m_ScaleX = scaleX;
+    m_ScaleY = scaleY;
 }

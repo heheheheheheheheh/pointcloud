@@ -64,7 +64,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         if (e.getPointerCount() == 1) {
-            consumeTouchEvent(e);
+//            consumeTouchEvent(e);
             long currentTimeMillis = System.currentTimeMillis();
             if (currentTimeMillis - mLastMultiTouchTime > 200)
             {
@@ -79,7 +79,6 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
                 }
                 mPreviousY = y;
                 mPreviousX = x;
-
                 mGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale);
                 requestRender();
             }
@@ -91,7 +90,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
         return true;
     }
 
-    @Override
+/*    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -117,11 +116,11 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
         mRatioWidth = width;
         mRatioHeight = height;
         requestLayout();
-    }
+    }*/
 
-    public MyGLRender getGLRender() {
-        return mGLRender;
-    }
+//    public MyGLRender getGLRender() {
+//        return mGLRender;
+//    }
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
@@ -150,7 +149,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
 
     }
 
-    public void consumeTouchEvent(MotionEvent e) {
+    /*public void consumeTouchEvent(MotionEvent e) {
         dealClickEvent(e);
         float touchX = -1, touchY = -1;
         switch (e.getAction()) {
@@ -184,13 +183,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
             default:
                 break;
         }
+    }*/
 
-    }
-
-    public void dealClickEvent(MotionEvent e) {
+/*    public void dealClickEvent(MotionEvent e) {
         float touchX = -1, touchY = -1;
         touchX = e.getX();
         touchY = e.getY();
         mGLRender.setTouchLoc(touchX, touchY);
-    }
+    }*/
 }

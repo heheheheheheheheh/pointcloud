@@ -80,7 +80,7 @@ public class MyGLRender implements GLSurfaceView.Renderer {
 
     public void updateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY)
     {
-//        mNativeRender.native_UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
+        mNativeRender.native_UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
     }
 
     public void setPointData(@Nullable float[] pointData,float[] bounds) {

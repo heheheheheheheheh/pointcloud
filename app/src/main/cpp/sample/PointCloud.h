@@ -12,20 +12,29 @@ class PointCloud : public GLSampleBase
 {
 public:
     bool VAOInited = false;
+    //opengl字段
     GLint m_PointSizeLoc;
     GLint m_MVPMatLoc;
+    //opengl vao vbo
     GLuint m_VaoId;
     GLuint m_VboIds[1];
+    //图形变换信息
     glm::mat4 m_MVPMatrix;
+    //手势变换信息
+    int m_AngleX;
+    int m_AngleY;
+    float m_ScaleX;
+    float m_ScaleY;
 
-    float m_Scale = 1.0f;
+    float m_PreScale = 1.0f;
 //    glm::vec3 Gravity;
-    glm::vec3 minCoordinate;
-    glm::vec3 maxCoordinate;
-    glm::vec3 bounding;
-    unsigned numberOfpoints;
-    float *m_Points;
-//    Octree* octree;
+    //点云信息
+    glm::vec3 minCoordinate;//xyz最小值
+    glm::vec3 maxCoordinate;//xyz最大值
+//    glm::vec3 bounding;
+    unsigned numberOfpoints;//顶点数
+    float *m_Points;//顶点信息
+
 
     PointCloud();
     virtual ~PointCloud();
@@ -36,11 +45,7 @@ public:
 
     virtual void Destroy();
 
-//   virtual glm::vec3& computeGravity();
-//   virtual void getBounding(glm::vec3&min,glm::vec3&max);
-//   virtual const glm::vec3* getPoint(unsigned);
-//   virtual void ConstructMinCube(glm::vec3& dimMin, glm::vec3& dimMax, double enlargeFactor/*=0.01*/);
-    //add Point
+/*    //add Point
     float getWidth()
     {
         return maxCoordinate.x - minCoordinate.x;
@@ -52,9 +57,10 @@ public:
     float getHeight()
     {
         return maxCoordinate.z - minCoordinate.z;
-    }
+    }*/
     virtual void setPointData(float *pDouble, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ);
     void UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio);
+    virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY);
     void initVAO();
 };
 

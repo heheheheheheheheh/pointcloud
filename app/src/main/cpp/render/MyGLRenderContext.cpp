@@ -5,6 +5,7 @@
 
 #include "MyGLRenderContext.h"
 #include "TriangleSample.h"
+#include "CoordinateSample.h"
 #include "PointCloud.h"
 #include "LogUtil.h"
 
@@ -12,7 +13,8 @@ MyGLRenderContext* MyGLRenderContext::m_pContext = nullptr;
 
 MyGLRenderContext::MyGLRenderContext()
 {
-	m_pCurSample = new PointCloud();
+	m_pCurSample = new CoordinateSample();
+//	m_pCurSample = new PointCloud();
 //	m_pCurSample = new TriangleSample();
 //	m_pCurSample->Init();
 }

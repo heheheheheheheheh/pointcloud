@@ -21,12 +21,12 @@ public:
     GLuint m_VaoId;
 
     //图形变换信息
-    glm::mat4 m_MVPMatrix;
+    glm::mat4 m_MVPMatrix = glm::mat4(1.0f);
     //手势变换信息
-    int m_AngleX;
-    int m_AngleY;
-    float m_ScaleX;
-    float m_ScaleY;
+    int m_AngleX = 0.0f;
+    int m_AngleY = 0.0f;
+    float m_ScaleX = 1.0f ;
+    float m_ScaleY = 1.0f;
 
     float m_PreScale = 1.0f;
 //    glm::vec3 Gravity;

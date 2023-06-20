@@ -2,8 +2,8 @@
 // Created by ByteFlow on 2019/7/9.
 //
 
-#ifndef NDK_OPENGLES_3_0_TRIANGLESAMPLE_H
-#define NDK_OPENGLES_3_0_TRIANGLESAMPLE_H
+#ifndef NDK_OPENGLES_3_TRIANGLESAMPLE_H
+#define NDK_OPENGLES_3_TRIANGLESAMPLE_H
 
 
 #include "GLSampleBase.h"
@@ -27,4 +27,4 @@ public:
 };
 
 
-#endif //NDK_OPENGLES_3_0_TRIANGLESAMPLE_H
+#endif //NDK_OPENGLES_3_TRIANGLESAMPLE_H

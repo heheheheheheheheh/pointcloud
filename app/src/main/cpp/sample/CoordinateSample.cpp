@@ -21,10 +21,14 @@ void CoordinateSample::Init()
             "#version 300 es                          \n"
             "layout(location = 0) in vec3 vPosition;  \n"
             "layout (location = 1) in vec3 color;\n"
+            "layout(std140)uniform mvpMatrix\n"
+            "{\n"
+            "mat4 matrix;\n"
+            "};\n"
             "out vec3 f_color;\n"
             "void main()                              \n"
             "{                                        \n"
-            "   gl_Position = vec4 ( vPosition, 1.0 );\n"
+            "   gl_Position = matrix*vec4(vPosition, 1.0f);\n"
             "   f_color = color;\n"
             "}                                        \n";
 
@@ -39,6 +43,11 @@ void CoordinateSample::Init()
             "}                                            \n";
 
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
+    if (m_ProgramObj) {
+        m_MVPMatLoc = glGetUniformBlockIndex(m_ProgramObj, "mvpMatrix");
+        glUniformBlockBinding(m_ProgramObj, m_MVPMatLoc, uboBindPoint1);
+        GO_CHECK_GL_ERROR();
+    }
     GLfloat vVertices[] = {
             0.0f,  0.0f, 0.0f,    1.0f, 0.0f, 0.0f,
             100.0f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
@@ -76,8 +85,8 @@ void CoordinateSample::Draw(int screenW, int screenH)
     if(m_ProgramObj == 0)
         return;
 
-    glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+//    glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    glClearColor(1.0, 1.0, 1.0, 1.0);
 
     // Use the program object
     glUseProgram (m_ProgramObj);

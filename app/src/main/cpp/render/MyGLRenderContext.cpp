@@ -7,14 +7,16 @@
 #include "TriangleSample.h"
 #include "CoordinateSample.h"
 #include "PointCloud.h"
+//#include "TempSample.h"
+#include "RenderPointGroup.h"
 #include "LogUtil.h"
 
 MyGLRenderContext* MyGLRenderContext::m_pContext = nullptr;
 
 MyGLRenderContext::MyGLRenderContext()
 {
-	m_pCurSample = new CoordinateSample();
-//	m_pCurSample = new PointCloud();
+//	m_pCurSample = new CoordinateSample();
+	m_pCurSample = new RenderPointGroup();
 //	m_pCurSample = new TriangleSample();
 //	m_pCurSample->Init();
 }
@@ -39,17 +41,17 @@ MyGLRenderContext::~MyGLRenderContext()
 	}
 }*/
 
-void MyGLRenderContext::SetParamsFloat(int paramType, float value0, float value1) {
+/*void MyGLRenderContext::SetParamsFloat(int paramType, float value0, float value1) {
 	LOGCATE("MyGLRenderContext::SetParamsFloat paramType=%d, value0=%f, value1=%f", paramType, value0, value1);
 	if(m_pCurSample)
 	{
 		switch (paramType)
 		{
 			case SAMPLE_TYPE_KEY_SET_TOUCH_LOC:
-				m_pCurSample->SetTouchLocation(value0, value1);
+//				m_pCurSample->SetTouchLocation(value0, value1);
 				break;
 			case SAMPLE_TYPE_SET_GRAVITY_XY:
-                m_pCurSample->SetGravityXY(value0, value1);
+//                m_pCurSample->SetGravityXY(value0, value1);
 				break;
 			default:
 				break;
@@ -63,10 +65,10 @@ void MyGLRenderContext::SetParamsShortArr(short *const pShortArr, int arrSize) {
 	LOGCATE("MyGLRenderContext::SetParamsShortArr pShortArr=%p, arrSize=%d, pShortArr[0]=%d", pShortArr, arrSize, pShortArr[0]);
 	if(m_pCurSample)
 	{
-		m_pCurSample->LoadShortArrData(pShortArr, arrSize);
+//		m_pCurSample->LoadShortArrData(pShortArr, arrSize);
 	}
 
-}
+}*/
 
 void MyGLRenderContext::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY)
 {

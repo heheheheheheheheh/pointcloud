@@ -11,7 +11,8 @@ class CoordinateSample : public GLSampleBase
 public:
     GLuint m_VaoId;
     GLuint m_VboIds[1];
-
+    GLint m_MVPMatLoc;
+    GLuint uboBindPoint1 = 1;
     CoordinateSample();
     virtual ~CoordinateSample();
 

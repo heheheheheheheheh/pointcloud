@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             if (mGLSurfaceView == null) {
                 mGLSurfaceView = MyGLSurfaceView(this, mGLRender)
                 mRootView.addView(mGLSurfaceView, lp)
-                mGLSurfaceView!!.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                mGLSurfaceView!!.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
 //        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
                 getPointData()
                 //fixme:耗时操作

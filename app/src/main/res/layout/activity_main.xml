@@ -7,14 +7,18 @@
     android:id="@+id/mRootView"
     tools:context=".MainActivity">
 
-<!--        <com.example.myapplication.MyGLSurfaceView
+        <com.example.myapplication.MyGLSurfaceView
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/mGLSurfaceView"/>-->
+            android:id="@+id/mGLSurfaceView"/>
         <TextView
             android:id="@+id/startRender"
             android:text="开始渲染"
+            android:gravity="center"
+            android:background="#f00"
             android:layout_width="100dp"
             android:layout_height="50dp"/>
+
+
 </RelativeLayout>

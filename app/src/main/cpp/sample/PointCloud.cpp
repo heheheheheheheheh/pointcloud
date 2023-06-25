@@ -17,71 +17,63 @@ PointCloud::~PointCloud() {
 
 void PointCloud::Init() {
     LOGCATE("PointCloud::Init");
-    if (m_ProgramObj != 0)
-        return;
-    char vShaderStr[] =
-            "#version 300 es\n"
-            "layout (location = 0) in vec3 position;\n"
-            "layout (location = 1) in vec3 color;\n"
-            "layout(std140)uniform mvpMatrix\n"
-            "{\n"
+    if (m_ProgramObj == 0) {
+        char vShaderStr[] =
+                "#version 300 es\n"
+                "layout (location = 0) in vec3 position;\n"
+                "layout (location = 1) in vec3 color;\n"
+                "layout(std140)uniform mvpMatrix\n"
+                "{\n"
                 "mat4 matrix;\n"
-            "};\n"
-            "uniform float vPointSize;\n"
-            "out vec3 f_color;\n"
-            "void main()\n"
-            "{\n"
-            "   gl_Position = matrix*vec4(position, 1.0f);\n"
-            "   gl_PointSize = vPointSize;\n"
-            "   f_color = color;\n"
-            "}\n";
-
-    char fShaderStr[] =
-            "#version 300 es                              \n"
-            "precision mediump float;                     \n"
-            "in vec3 f_color;                          \n"
-            "out vec4 fragColor;                          \n"
-            "void main()                                  \n"
-            "{                                            \n"
-            "   fragColor = vec4 (f_color, 1.0 );  \n"
-            "}                                            \n";
-
-    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
-    if (m_ProgramObj) {
-        m_PointSizeLoc = glGetUniformLocation(m_ProgramObj, "vPointSize");
-//        m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "mvpMatrix");
-        m_MVPMatLoc = glGetUniformBlockIndex(m_ProgramObj, "mvpMatrix");
-        glUniformBlockBinding(m_ProgramObj, m_MVPMatLoc, uboBindPoint1);
-        GO_CHECK_GL_ERROR();
+                "};\n"
+                "uniform float vPointSize;\n"
+                "out vec3 f_color;\n"
+                "void main()\n"
+                "{\n"
+                "   gl_Position = matrix*vec4(position, 1.0f);\n"
+                "   gl_PointSize = vPointSize;\n"
+                "   f_color = color;\n"
+                "}\n";
+        char fShaderStr[] =
+                "#version 300 es                              \n"
+                "precision mediump float;                     \n"
+                "in vec3 f_color;                          \n"
+                "out vec4 fragColor;                          \n"
+                "void main()                                  \n"
+                "{                                            \n"
+                "   fragColor = vec4 (f_color, 1.0 );  \n"
+                "}                                            \n";
+        m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
+        if (m_ProgramObj) {
+            m_PointSizeLoc = glGetUniformLocation(m_ProgramObj, "vPointSize");
+            m_MVPMatLoc = glGetUniformBlockIndex(m_ProgramObj, "mvpMatrix");
+            glUniformBlockBinding(m_ProgramObj, m_MVPMatLoc, uboBindPoint0);
+            GO_CHECK_GL_ERROR();
+        }
     }
-    initVAO();
-
+    if (!VAOInited) {
+        initVAO();
+    }
 }
 
 void PointCloud::Draw(int screenW, int screenH) {
-    LOGCATE("PointCloud::Draw");
-    if (m_ProgramObj == 0)
-        return;
+    LOGCATE("PointCloud::Draw program:%d init:%d",m_ProgramObj,VAOInited);
     glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glEnable(GL_DEPTH_TEST);
+    if (m_ProgramObj == 0 || !VAOInited)
+        return;
     // Use the program object
     glUseProgram(m_ProgramObj);
     glBindVertexArray(m_VaoId);
 //    glBindBuffer(GL_UNIFORM_BUFFER,m_UboId);
-
-
     glUniform1f(m_PointSizeLoc, 5.0f);
-
     UpdateMVPMatrix(m_MVPMatrix, m_AngleX, m_AngleY, (float) screenW / screenH);
-    glBindBuffer(GL_UNIFORM_BUFFER, m_UboId);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &m_MVPMatrix[0][0]);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-//    glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
-
+    LOGCATE("PointCloud::73");
+    GO_CHECK_GL_ERROR();
     glDrawArrays(GL_POINTS, 0, numberOfpoints);
-//    glDrawElements(GL_POINTS, numberOfpoints, GL_UNSIGNED_SHORT, (const void *) 0);
-    glBindBuffer(GL_UNIFORM_BUFFER,GL_NONE);
+    LOGCATE("PointCloud::75");
+    glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
     glBindVertexArray(GL_NONE);
     glUseProgram(GL_NONE);
 }
@@ -113,9 +105,16 @@ void PointCloud::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, f
     float transX = -(minCoordinate.x + maxCoordinate.x) / 2;
     float transY = -(minCoordinate.y + maxCoordinate.y) / 2;
     float transZ = -(minCoordinate.z + maxCoordinate.z) / 2;
+    glm::mat4 Model2 = glm::mat4(Model);
     Model = glm::translate(Model, glm::vec3(transX, transY, transZ));
 
     mvpMatrix = Projection * View * Model;
+    Model2 = Projection * View * Model2;
+    glBindBuffer(GL_UNIFORM_BUFFER, m_UboId[0]);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &mvpMatrix[0][0]);
+    glBindBuffer(GL_UNIFORM_BUFFER, m_UboId[1]);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &Model2[0][0]);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void PointCloud::Destroy() {
@@ -150,6 +149,7 @@ void PointCloud::setPointOtherData(float *pData, int length, int singleSize) {
 
 void PointCloud::initVAO() {
     LOGCATE("PointCloud::initVAO");
+    if (numberOfpoints == 0)return;
     GLuint m_VboId[2];
     glGenBuffers(2, m_VboId);
     glBindBuffer(GL_ARRAY_BUFFER, m_VboId[0]);
@@ -174,11 +174,15 @@ void PointCloud::initVAO() {
     glBindVertexArray(GL_NONE);
 
 
-    glGenBuffers(1,&m_UboId);
-    glBindBuffer(GL_UNIFORM_BUFFER,m_UboId);
-    glBufferData(GL_UNIFORM_BUFFER,sizeof(glm::mat4),NULL,GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_UNIFORM_BUFFER,0);
-    glBindBufferBase(GL_UNIFORM_BUFFER, uboBindPoint1, m_UboId);
+    glGenBuffers(2, m_UboId);
+    glBindBuffer(GL_UNIFORM_BUFFER, m_UboId[0]);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, uboBindPoint0, m_UboId[0]);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, m_UboId[1]);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, uboBindPoint1, m_UboId[1]);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
     VAOInited = true;
 }
 

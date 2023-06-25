@@ -12,7 +12,7 @@ public:
     GLuint m_VaoId;
     GLuint m_VboIds[1];
     GLint m_MVPMatLoc;
-    GLuint uboBindPoint1 = 1;
+    GLuint uboBindPoint1 = 2;
     CoordinateSample();
     virtual ~CoordinateSample();
 

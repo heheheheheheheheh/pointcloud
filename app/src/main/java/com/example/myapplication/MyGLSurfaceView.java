@@ -11,7 +11,7 @@ import android.view.ScaleGestureDetector;
 public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetector.OnScaleGestureListener {
     private static final String TAG = "MyGLSurfaceView";
 
-    private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
+    private final float TOUCH_SCALE_FACTOR = 0.3f;
 
     private float mPreviousY;
     private float mPreviousX;
@@ -30,23 +30,27 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
     private float mCurScale = 1.0f;
     private long mLastMultiTouchTime;
 
-//    public MyGLSurfaceView(Context context) {
-//        this(context, null);
-//    }
-//
-//    public MyGLSurfaceView(Context context, AttributeSet attrs) {
-//        super(context, attrs);
-//        this.setEGLContextClientVersion(2);
-//        mGLRender = new MyGLRender();
-//        /*If no setEGLConfigChooser method is called,
-//        then by default the view will choose an RGB_888 surface with a depth buffer depth of at least 16 bits.*/
-//        setEGLConfigChooser(8, 8, 8, 8, 16, 8);
-//        setRenderer(mGLRender);
-//        setRenderMode(RENDERMODE_WHEN_DIRTY);
-//        mScaleGestureDetector = new ScaleGestureDetector(context, this);
-//
-//    }
+    public MyGLSurfaceView(Context context) {
+        this(context, (AttributeSet) null);
+    }
 
+    public MyGLSurfaceView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.setEGLContextClientVersion(2);
+        mGLRender = new MyGLRender();
+        /*If no setEGLConfigChooser method is called,
+        then by default the view will choose an RGB_888 surface with a depth buffer depth of at least 16 bits.*/
+        setEGLConfigChooser(8, 8, 8, 8, 16, 8);
+        setRenderer(mGLRender);
+        setRenderMode(RENDERMODE_WHEN_DIRTY);
+        mScaleGestureDetector = new ScaleGestureDetector(context, this);
+    }
+    public MyGLSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
+        this(context,attrs);
+    }
+    public MyGLRender getRender(){
+        return mGLRender;
+    }
     public MyGLSurfaceView(Context context, MyGLRender glRender) {
         this(context, glRender, null);
     }

@@ -19,8 +19,9 @@ public:
     GLint m_MVPMatLoc;
     //opengl vao vbo
     GLuint m_VaoId;
-    GLuint m_UboId;
-    GLuint uboBindPoint1 = 1;
+    GLuint m_UboId[2];
+    GLuint uboBindPoint0 = 1;
+    GLuint uboBindPoint1 = 2;
     //图形变换信息
     glm::mat4 m_MVPMatrix = glm::mat4(1.0f);
     //手势变换信息

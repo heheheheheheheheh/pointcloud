@@ -6,7 +6,6 @@
 #include "CoordinateSample.h"
 CoordinateSample::CoordinateSample()
 {
-
 }
 
 CoordinateSample::~CoordinateSample()
@@ -65,7 +64,6 @@ void CoordinateSample::Init()
     glBindVertexArray(m_VaoId);
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[0]);
 
-
     GO_CHECK_GL_ERROR();
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (const void *) 0);
@@ -80,22 +78,12 @@ void CoordinateSample::Init()
 void CoordinateSample::Draw(int screenW, int screenH)
 {
     LOGCATE("CoordinateSample::Draw");
-
-
     if(m_ProgramObj == 0)
         return;
-
-//    glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//    glClearColor(1.0, 1.0, 1.0, 1.0);
-
     // Use the program object
     glUseProgram (m_ProgramObj);
     glBindVertexArray(m_VaoId);
     // Load the vertex data
-//	glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 0, vVertices );
-//	glEnableVertexAttribArray (0);
-
-//	glDrawArrays (GL_TRIANGLES, 0, 3);
     glLineWidth(5);
     glDrawArrays (GL_LINES, 0, 6);
     glUseProgram (GL_NONE);
@@ -109,5 +97,4 @@ void CoordinateSample::Destroy()
         glDeleteProgram(m_ProgramObj);
         m_ProgramObj = GL_NONE;
     }
-
 }

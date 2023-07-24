@@ -14,11 +14,13 @@ class PointCloud : public GLSampleBase
 public:
     DataMessage otherMessage;
     bool VAOInited = false;
+    bool VAORefresh = false;
     //opengl字段
     GLint m_PointSizeLoc;
     GLint m_MVPMatLoc;
     //opengl vao vbo
     GLuint m_VaoId;
+    GLuint m_VboId[2];
     GLuint m_UboId[2];
     GLuint uboBindPoint0 = 1;
     GLuint uboBindPoint1 = 2;
@@ -52,6 +54,7 @@ public:
     virtual void setPointData(float *pDouble, int i,float minX,float minY,float minZ,float maxX,float maxY,float maxZ);
     virtual void setPointOtherData(float *pData, int length, int singleSize);
     void UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio);
+    void updatePoint();
     virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY);
     void initVAO();
 };

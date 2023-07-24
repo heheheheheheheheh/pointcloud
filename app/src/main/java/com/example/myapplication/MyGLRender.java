@@ -1,13 +1,8 @@
 package com.example.myapplication;
 
-import static com.example.myapplication.MyNativeRender.SAMPLE_TYPE_SET_GRAVITY_XY;
-import static com.example.myapplication.MyNativeRender.SAMPLE_TYPE_SET_TOUCH_LOC;
-
 import android.opengl.GLSurfaceView;
 import android.util.Log;
-
 import org.jetbrains.annotations.Nullable;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 

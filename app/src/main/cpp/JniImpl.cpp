@@ -11,74 +11,28 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*
- * Class:     com_byteflow_app_MyNativeRender
- * Method:    native_Init
- * Signature: ()V
- */
+
 JNIEXPORT void JNICALL native_Init(JNIEnv *env, jobject instance)
 {
 	MyGLRenderContext::GetInstance();
 
 }
 
-/*
- * Class:     com_byteflow_app_MyNativeRender
- * Method:    native_UnInit
- * Signature: ()V
- */
 JNIEXPORT void JNICALL native_UnInit(JNIEnv *env, jobject instance)
 {
 	MyGLRenderContext::DestroyInstance();
 }
 
-/*
- * Class:     com_byteflow_app_MyNativeRender
- * Method:    native_SetParamsInt
- * Signature: (III)V
- */
-/*JNIEXPORT void JNICALL native_SetParamsInt
-		(JNIEnv *env, jobject instance, jint paramType, jint value0, jint value1)
-{
-	MyGLRenderContext::GetInstance()->SetParamsInt(paramType, value0, value1);
-}*/
-
-/*
- * Class:     com_byteflow_app_MyNativeRender
- * Method:    native_SetParamsFloat
- * Signature: (IFF)V
- */
-/*JNIEXPORT void JNICALL native_SetParamsFloat
-		(JNIEnv *env, jobject instance, jint paramType, jfloat value0, jfloat value1)
-{
-	MyGLRenderContext::GetInstance()->SetParamsFloat(paramType, value0, value1);
-}*/
-
-/*
- * Class:     com_byteflow_app_MyNativeRender
- * Method:    native_UpdateTransformMatrix
- * Signature: (FFFF)V
- */
 JNIEXPORT void JNICALL native_UpdateTransformMatrix(JNIEnv *env, jobject instance, jfloat rotateX, jfloat rotateY, jfloat scaleX, jfloat scaleY)
 {
 	MyGLRenderContext::GetInstance()->UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
 }
 
-/*
- * Class:     com_byteflow_app_MyNativeRender
- * Method:    native_OnSurfaceCreated
- * Signature: ()V
- */
 JNIEXPORT void JNICALL native_OnSurfaceCreated(JNIEnv *env, jobject instance)
 {
 	MyGLRenderContext::GetInstance()->OnSurfaceCreated();
 }
 
-/*
- * Class:     com_byteflow_app_MyNativeRender
- * Method:    native_OnSurfaceChanged
- * Signature: (II)V
- */
 JNIEXPORT void JNICALL native_OnSurfaceChanged
 (JNIEnv *env, jobject instance, jint width, jint height)
 {
@@ -121,11 +75,6 @@ static JNINativeMethod g_RenderMethods[] = {
 		{"native_UnInit",                    "()V",       (void *)(native_UnInit)},
 		{"native_setPointData",              "([FFFFFFF)V",       (void *)(native_setPointData)},
 		{"native_setPointOtherData",              "([FI)V",       (void *)(native_setPointOtherData)},
-		//{"native_SetImageData",              "(III[B)V",  (void *)(native_SetImageData)},
-		//{"native_SetImageDataWithIndex",     "(IIII[B)V", (void *)(native_SetImageDataWithIndex)},
-//		{"native_SetParamsInt",              "(III)V",    (void *)(native_SetParamsInt)},
-//		{"native_SetParamsFloat",            "(IFF)V",    (void *)(native_SetParamsFloat)},
-		//{"native_SetAudioData",              "([S)V",     (void *)(native_SetAudioData)},
 		{"native_UpdateTransformMatrix",     "(FFFF)V",   (void *)(native_UpdateTransformMatrix)},
 		{"native_OnSurfaceCreated",          "()V",       (void *)(native_OnSurfaceCreated)},
 		{"native_OnSurfaceChanged",          "(II)V",     (void *)(native_OnSurfaceChanged)},

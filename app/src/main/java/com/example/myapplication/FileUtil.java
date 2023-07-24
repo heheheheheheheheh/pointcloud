@@ -65,7 +65,61 @@ public class FileUtil {
         }
         return list;
     }
+    public static ArrayList<Float> readPointCloudColor(Activity activity, String fileName,int loop) {
+        float add = 0.01f * loop;
+        if (add>1.0f){
+            add = add - (int)add;
+        }
+        ArrayList<Float> list = new ArrayList<>();
+        BufferedReader buffReader = null;
+        InputStream inputStream = null;
+        InputStreamReader fileReader = null;
+        try {
+            inputStream = activity.getAssets().open(fileName);
+            fileReader = new InputStreamReader(inputStream);
+            buffReader = new BufferedReader(fileReader);
+            String str = null;
+            while ((str = buffReader.readLine()) != null) {
+                String[] strs = str.split(",");
+                if (strs.length == 3) {
+                    for (int i = 0; i < strs.length; i++) {
+                        int value = Integer.parseInt(strs[i]);
+                        /*if (i == 0){
+                            list.add(value/COLOR_PARSE_NUM + add);
+                        }else{
+                            list.add(value/COLOR_PARSE_NUM);
+                        }*/
+                        list.add(value/COLOR_PARSE_NUM + add);
+                    }
 
+                } else {
+                    list.add(add);
+                    list.add(add);
+                    list.add(add);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                    inputStream = null;
+                }
+                if (fileReader != null) {
+                    fileReader.close();
+                    fileReader = null;
+                }
+                if (buffReader != null) {
+                    buffReader.close();
+                    buffReader = null;
+                }
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
     public static ArrayList<Float> readPointCloud(Activity activity, String fileName, float[] bounds) {
         float maxX = Float.MIN_VALUE;
         float maxY = Float.MIN_VALUE;

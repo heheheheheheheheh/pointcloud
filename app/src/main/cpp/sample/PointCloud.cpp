@@ -57,7 +57,7 @@ void PointCloud::Init() {
 }
 
 void PointCloud::Draw(int screenW, int screenH) {
-    LOGCATE("PointCloud::Draw program:%d init:%d",m_ProgramObj,VAOInited);
+    LOGCATE("PointCloud::Draw");
     glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glEnable(GL_DEPTH_TEST);
@@ -66,18 +66,29 @@ void PointCloud::Draw(int screenW, int screenH) {
     // Use the program object
     glUseProgram(m_ProgramObj);
     glBindVertexArray(m_VaoId);
-//    glBindBuffer(GL_UNIFORM_BUFFER,m_UboId);
     glUniform1f(m_PointSizeLoc, 5.0f);
+    updatePoint();
     UpdateMVPMatrix(m_MVPMatrix, m_AngleX, m_AngleY, (float) screenW / screenH);
-    LOGCATE("PointCloud::73");
-    GO_CHECK_GL_ERROR();
     glDrawArrays(GL_POINTS, 0, numberOfpoints);
-    LOGCATE("PointCloud::75");
     glBindBuffer(GL_UNIFORM_BUFFER, GL_NONE);
     glBindVertexArray(GL_NONE);
     glUseProgram(GL_NONE);
 }
+void PointCloud::updatePoint(){
+    if (VAORefresh){
+//        glBindVertexArray(m_VaoId);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VboId[0]);
+//        glBufferData(GL_ARRAY_BUFFER, numberOfpoints * 3 * sizeof(float), m_Points, GL_DYNAMIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, numberOfpoints * 3 * sizeof(float), m_Points);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VboId[1]);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, otherMessage.length * otherMessage.singleSize * sizeof(float), otherMessage.data);
+//        glBufferData(GL_ARRAY_BUFFER, otherMessage.length * otherMessage.singleSize * sizeof(float),
+//                     otherMessage.data, GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    }
+    VAORefresh = false;
+}
 void PointCloud::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
 //    LOGCATE("AvatarSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX, angleY,
 //            ratio);
@@ -92,9 +103,9 @@ void PointCloud::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, f
     glm::mat4 Projection = glm::perspective(45.0f, ratio, 0.1f, 100.f);
     // View matrix
     glm::mat4 View = glm::lookAt(
-            glm::vec3(0, 4, 4), // Camera is at (0,0,1), in World Space
+            glm::vec3(0, 0, -4), // Camera is at (0,0,1), in World Space
             glm::vec3(0, 0, 0), // and looks at the origin
-            glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+            glm::vec3(0, -1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
     );
     // Model matrix
     glm::mat4 Model = glm::mat4(1.0f);
@@ -126,6 +137,7 @@ void PointCloud::Destroy() {
 
 void PointCloud::setPointData(float *points, int i, float minX, float minY, float minZ, float maxX,
                               float maxY, float maxZ) {
+    VAORefresh = true;
     m_Points = points;
     numberOfpoints = i;
     minCoordinate.x = minX;
@@ -142,6 +154,7 @@ void PointCloud::setPointData(float *points, int i, float minX, float minY, floa
 }
 
 void PointCloud::setPointOtherData(float *pData, int length, int singleSize) {
+    VAORefresh = true;
     otherMessage.data = pData;;
     otherMessage.length = length;
     otherMessage.singleSize = singleSize;
@@ -150,17 +163,15 @@ void PointCloud::setPointOtherData(float *pData, int length, int singleSize) {
 void PointCloud::initVAO() {
     LOGCATE("PointCloud::initVAO");
     if (numberOfpoints == 0)return;
-    GLuint m_VboId[2];
+    glGenVertexArrays(1, &m_VaoId);
     glGenBuffers(2, m_VboId);
+    glBindVertexArray(m_VaoId);
     glBindBuffer(GL_ARRAY_BUFFER, m_VboId[0]);
-    glBufferData(GL_ARRAY_BUFFER, numberOfpoints * 3 * sizeof(float), m_Points, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, numberOfpoints * 3 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VboId[1]);
     glBufferData(GL_ARRAY_BUFFER, otherMessage.length * otherMessage.singleSize * sizeof(float),
-                 otherMessage.data, GL_STATIC_DRAW);
-
-    glGenVertexArrays(1, &m_VaoId);
-    glBindVertexArray(m_VaoId);
+                 NULL, GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VboId[0]);
     glEnableVertexAttribArray(0);
@@ -184,6 +195,7 @@ void PointCloud::initVAO() {
     glBindBufferBase(GL_UNIFORM_BUFFER, uboBindPoint1, m_UboId[1]);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     VAOInited = true;
+    VAORefresh = false;
 }
 
 void PointCloud::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY) {

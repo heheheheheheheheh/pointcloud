@@ -45,6 +45,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
         setRenderMode(RENDERMODE_WHEN_DIRTY);
         mScaleGestureDetector = new ScaleGestureDetector(context, this);
     }
+
     public MyGLSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context,attrs);
     }

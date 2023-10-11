@@ -66,10 +66,10 @@ public class FileUtil {
         return list;
     }
     public static ArrayList<Float> readPointCloudColor(Activity activity, String fileName,int loop) {
-        float add = 0.01f * loop;
+        /*float add = 0.01f * loop;
         if (add>1.0f){
             add = add - (int)add;
-        }
+        }*/
         ArrayList<Float> list = new ArrayList<>();
         BufferedReader buffReader = null;
         InputStream inputStream = null;
@@ -89,13 +89,13 @@ public class FileUtil {
                         }else{
                             list.add(value/COLOR_PARSE_NUM);
                         }*/
-                        list.add(value/COLOR_PARSE_NUM + add);
+                        list.add(value/COLOR_PARSE_NUM);
                     }
 
                 } else {
-                    list.add(add);
-                    list.add(add);
-                    list.add(add);
+                    list.add(0f);
+                    list.add(0f);
+                    list.add(0f);
                 }
             }
 

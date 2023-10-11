@@ -78,12 +78,12 @@ void PointCloud::updatePoint(){
     if (VAORefresh){
 //        glBindVertexArray(m_VaoId);
         glBindBuffer(GL_ARRAY_BUFFER, m_VboId[0]);
-//        glBufferData(GL_ARRAY_BUFFER, numberOfpoints * 3 * sizeof(float), m_Points, GL_DYNAMIC_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, numberOfpoints * 3 * sizeof(float), m_Points);
+        glBufferData(GL_ARRAY_BUFFER, numberOfpoints * 3 * sizeof(float), m_Points, GL_DYNAMIC_DRAW);
+//        glBufferSubData(GL_ARRAY_BUFFER, 0, numberOfpoints * 3 * sizeof(float), m_Points);
         glBindBuffer(GL_ARRAY_BUFFER, m_VboId[1]);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, otherMessage.length * otherMessage.singleSize * sizeof(float), otherMessage.data);
-//        glBufferData(GL_ARRAY_BUFFER, otherMessage.length * otherMessage.singleSize * sizeof(float),
-//                     otherMessage.data, GL_DYNAMIC_DRAW);
+//        glBufferSubData(GL_ARRAY_BUFFER, 0, otherMessage.length * otherMessage.singleSize * sizeof(float), otherMessage.data);
+        glBufferData(GL_ARRAY_BUFFER, otherMessage.length * otherMessage.singleSize * sizeof(float),
+                     otherMessage.data, GL_DYNAMIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     }
